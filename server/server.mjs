@@ -1,10 +1,7 @@
 import app from './express.mjs'
 
-
-
-
-app.listen(37461, () => {
-    console.log("Listening:37461")
+app.listen(3001, () => {
+    console.log("Listening:3001")
 })
 
 
