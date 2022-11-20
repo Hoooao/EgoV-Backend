@@ -1,6 +1,7 @@
 
 import UserModel from '../models/UserModel.mjs';
 import bcrypt from 'bcrypt'
+import e from 'express';
 
 const saltRounds = 10;
 
@@ -16,9 +17,9 @@ const UserController = {
                     if (err) console.log(err);
                     else {
                         if (result) {
-                            response[0].psw_encrypted=0;
+                            response[0].psw_encrypted = 0;
                             req.session.user = response[0];
-                            res.send({ ok: 1, message: "Login Success", userObj:response[0] })
+                            res.send({ ok: 1, message: "Login Success", userObj: response[0] })
                         } else {
                             res.send({ ok: 0, message: "Password Incorrect" });
                         }
@@ -46,29 +47,35 @@ const UserController = {
     },
 
     // getUserInfo is for profile
-    getUserInfo: async(req,res)=>{
-        const {id} = req.body;
-        const response = (await UserModel.getUserInfo(id))[0][0];
-        res.send(response); 
+    getUserInfo: async (req, res) => {
+        if (req.session.user) {
+            const { id } = req.session.user;
+            const response = (await UserModel.getUserInfo(id))[0][0];
+            res.send({ok:1,userObj : response});
+        }
+        else {
+            res.send({ok:0, message:"Not logged in", userObj:{}})
+        }
+
     },
 
-    updateUserInfo: async(req,res)=>{
-        const {id, name, description, avatar} =  req.body;
+    updateUserInfo: async (req, res) => {
+        const { id, name, description, avatar } = req.body;
         const response = (await UserModel.getUserInfo(id))[0][0];
         const newInfo = {
             id,
-            name:name? name : response.name,
-            description:description? description : response.description,
-            avatar:avatar? avatar : response.avatar
+            name: name ? name : response.name,
+            description: description ? description : response.description,
+            avatar: avatar ? avatar : response.avatar
         }
         await UserModel.updateUserInfo(newInfo);
-        res.send({ok:1});
+        res.send({ ok: 1 });
     },
 
-    addSuggest: async(req,res)=>{
-        const { type, description} = req.body;
-        await UserModel.addSuggest(5,type, description );
-        res.send({ok:1, message:"Sent"});
+    addSuggest: async (req, res) => {
+        const { type, description } = req.body;
+        await UserModel.addSuggest(5, type, description);
+        res.send({ ok: 1, message: "Sent" });
     }
 }
 
