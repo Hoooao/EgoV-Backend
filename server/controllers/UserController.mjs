@@ -8,15 +8,17 @@ const UserController = {
     // getUser is for login, the user detail would not be sent.
     getUser: async (req, res) => {
         const { username_mail, password } = req.body;
-        const response = await UserModel.getUser(username_mail, password);
-        if (response[0].length) {
+        const response = (await UserModel.getUser(username_mail, password))[0];
+        if (response.length) {
             bcrypt.compare(password,
-                response[0][0].psw_encrypted,
+                response[0].psw_encrypted,
                 function (err, result) {
                     if (err) console.log(err);
                     else {
                         if (result) {
-                            res.send({ ok: 1, message: "Login Success" })
+                            response[0].psw_encrypted=0;
+                            req.session.user = response[0];
+                            res.send({ ok: 1, message: "Login Success", userObj:response[0] })
                         } else {
                             res.send({ ok: 0, message: "Password Incorrect" });
                         }
@@ -61,6 +63,12 @@ const UserController = {
         }
         await UserModel.updateUserInfo(newInfo);
         res.send({ok:1});
+    },
+
+    addSuggest: async(req,res)=>{
+        const { type, description} = req.body;
+        await UserModel.addSuggest(5,type, description );
+        res.send({ok:1, message:"Sent"});
     }
 }
 

@@ -30,6 +30,13 @@ const UserModel = {
                 where id = ?`,
                 [des,avatar,name,id]
         )
+    },
+
+    addSuggest: async(id,type,desc)=>{
+        return await promisePool.query(
+            `insert into suggestions (user_id,type,content)
+                values (?,?,?)`,[id,type,desc]
+        )
     }
 }
 

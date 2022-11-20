@@ -13,6 +13,7 @@ router.post('/login',UserController.getUser);
 router.post('/signup',UserController.addUser)
 router.post('/profile', UserController.getUserInfo);
 router.post('/update_profile', UserController.updateUserInfo);
+router.post('/suggestion',UserController.addSuggest)
 router.post('/logout',logout);
 
 

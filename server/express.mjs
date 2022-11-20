@@ -12,42 +12,41 @@ const app = express();
 
 // A configured obj for storing sessions
 const MySQLStore = mySQLSession(session);
-const sessionStore = new MySQLStore({},promisePool);
+const sessionStore = new MySQLStore({}, promisePool);
 
 // Body-parser and serving files
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dir, '../../EgoV-Frontend/build')));
 app.use(cors({
-    origin:['http://localhost:3000'],
-    methods:["GET","POST"],
-    credentials:true
+    origin: ['http://localhost:3000'],
+    methods: ["GET", "POST"],
+    credentials: true
 }))
 // Set up session, req.session will be added after this mdw
 app.use(session({
     key: 'ego_varsity_cookie',
-	secret: 'asdnsm f,sf kajwnekjanms dsds',
-    cookie:{
-        maxAge:1000*60*60*24*3,
-        secure:true,
+    secret: 'asdnsm f,sf kajwnekjanms dsds',
+    cookie: {
+        maxAge: 60 * 60 * 24 * 1000
     },
-	store: sessionStore,
-	resave: true,
-    rolling:true,
-	saveUninitialized: true
+    store: sessionStore,
+    resave: true,
+    rolling: true,
+    saveUninitialized: true
 }))
 
 // Check session expiration
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
     // If the user is in login, no action
-    if(req.url.includes('login')||req.url.includes('signup')){
+    if (req.url.includes('login') || req.url.includes('signup')) {
         next();
         return;
     }
     // 
-    if(req.session.user){
+    if (req.session.user) {
         next();
-    }else {
+    } else {
         // Block any API requests if expired
         // req.url.includes("api")? res.status(401).send({ok:0, message:"You do not have the authorization to view this site"}):
         // res.redirect("/login");
@@ -59,7 +58,7 @@ app.use((req,res,next)=>{
 
 // Router for all APIs
 // /api is for avoiding conflict with react requests (if running on the same port)
-app.use('/api',MainRouter);
+app.use('/api', MainRouter);
 
 // Serve React files
 app.get('*', (req, res) => {
