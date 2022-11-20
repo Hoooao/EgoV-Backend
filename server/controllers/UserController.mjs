@@ -36,7 +36,7 @@ const UserController = {
             }
             else {
                 const response = await UserModel.addUser(username, email, psw_encrypted);
-                res.send({ ok: 0, message: "Signup Success" });
+                res.send({ ok: 1, message: "Signup Success" });
             }
         })
 

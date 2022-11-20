@@ -2,7 +2,7 @@ import path from 'path';
 import url from 'url';
 import express from 'express';
 import session from 'express-session';
-import MySQLStore from 'express-mysql-session'
+import mySQLSession from 'express-mysql-session'
 import cors from 'cors'
 import MainRouter from './routes/MainRouter.mjs'
 import promisePool from './db.mjs';
@@ -11,6 +11,7 @@ const __dir = path.dirname(url.fileURLToPath(import.meta.url));
 const app = express();
 
 // A configured obj for storing sessions
+const MySQLStore = mySQLSession(session);
 const sessionStore = new MySQLStore({},promisePool);
 
 // Body-parser and serving files
@@ -18,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dir, '../../EgoV-Frontend/build')));
 app.use(cors({
-    origin:['http://localhost:3001'],
+    origin:['http://localhost:3000'],
     methods:["GET","POST"],
     credentials:true
 }))
@@ -28,12 +29,12 @@ app.use(session({
 	secret: 'asdnsm f,sf kajwnekjanms dsds',
     cookie:{
         maxAge:1000*60*60*24*3,
-        secure:false
+        secure:true,
     },
 	store: sessionStore,
 	resave: true,
     rolling:true,
-	saveUninitialized: false
+	saveUninitialized: true
 }))
 
 // Check session expiration
