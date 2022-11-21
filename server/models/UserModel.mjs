@@ -23,12 +23,12 @@ const UserModel = {
     },
 
     updateUserInfo: async(newInfo)=>{
-        const {des, avatar, name, id} = newInfo;
+        const {description, avatar, name, id,email} = newInfo;
         return await promisePool.query(
             `update users
-                set description = ?, avatar = ?, name = ?
+                set description = ?, avatar = ?, name = ?, email = ?
                 where id = ?`,
-                [des,avatar,name,id]
+                [description,avatar,name,email,id]
         )
     },
 
@@ -36,6 +36,12 @@ const UserModel = {
         return await promisePool.query(
             `insert into suggestions (user_id,type,content)
                 values (?,?,?)`,[id,type,desc]
+        )
+    },
+
+    getSuggest: async ()=>{
+        return await promisePool.query(
+            `select * from suggestions`
         )
     }
 }

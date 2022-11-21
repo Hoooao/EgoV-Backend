@@ -12,9 +12,11 @@ const logout = (req,res)=>{
 router.post('/login',UserController.getUser);
 router.post('/signup',UserController.addUser)
 router.post('/update_profile', UserController.updateUserInfo);
-router.post('/suggestion',UserController.addSuggest)
-router.post('/logout',logout);
+router.post('/add_suggestion',UserController.addSuggest)
+
+router.get('/logout',logout);
 router.get('/profile', UserController.getUserInfo);
+router.get('/get_suggestion', UserController.getSuggest);
 
 
 export default router;

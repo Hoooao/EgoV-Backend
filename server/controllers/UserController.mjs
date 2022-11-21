@@ -60,22 +60,28 @@ const UserController = {
     },
 
     updateUserInfo: async (req, res) => {
-        const { id, name, description, avatar } = req.body;
+        const { id, name, description, avatar,email } = req.body;
         const response = (await UserModel.getUserInfo(id))[0][0];
         const newInfo = {
             id,
             name: name ? name : response.name,
             description: description ? description : response.description,
-            avatar: avatar ? avatar : response.avatar
+            avatar: avatar ? avatar : response.avatar,
+            email: email ? email : response.email
         }
         await UserModel.updateUserInfo(newInfo);
         res.send({ ok: 1 });
     },
 
     addSuggest: async (req, res) => {
-        const { type, description } = req.body;
-        await UserModel.addSuggest(5, type, description);
+        const { user_id, type, content } = req.body;
+        await UserModel.addSuggest(user_id , type, content);
         res.send({ ok: 1, message: "Sent" });
+    },
+
+    getSuggest: async(req,res)=>{
+        const results = (await UserModel.getSuggest())[0];
+        res.send({ok:1, suggestions: results});
     }
 }
 
