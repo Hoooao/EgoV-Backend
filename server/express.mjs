@@ -17,7 +17,7 @@ const sessionStore = new MySQLStore({}, promisePool);
 // Body-parser and serving files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dir, '../../EgoV-Frontend/build')));
+// app.use(express.static(path.join(__dir, '../build')));
 app.use(cors({
     origin: ['http://localhost:3000'],
     methods: ["GET", "POST"],
@@ -28,12 +28,12 @@ app.use(session({
     key: 'ego_varsity_cookie',
     secret: 'asdnsm f,sf kajwnekjanms dsds',
     cookie: {
-        maxAge: 60 * 60 * 24 * 1000
+        maxAge: 60 * 60 * 24 * 1000,
     },
     store: sessionStore,
     resave: true,
     rolling: true,
-    saveUninitialized: true
+    saveUninitialized: false,
 }))
 
 // Check session expiration
@@ -61,8 +61,8 @@ app.use((req, res, next) => {
 app.use('/api', MainRouter);
 
 // Serve React files
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dir, '../build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dir, './build', 'index.html'));
+// });
 
 export default app;

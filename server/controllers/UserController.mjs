@@ -19,6 +19,7 @@ const UserController = {
                         if (result) {
                             response[0].psw_encrypted = 0;
                             req.session.user = response[0];
+                            console.log(1)
                             res.send({ ok: 1, message: "Login Success", userObj: response[0] })
                         } else {
                             res.send({ ok: 0, message: "Password Incorrect" });
