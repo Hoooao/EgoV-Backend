@@ -1,15 +1,15 @@
 import promisePool from "../db.mjs";
 
-const SubjectModel = {
-    getSubjects: async (num) => {
+const CourseModel = {
+    getCourses: async (num) => {
         if(num){
             return await promisePool.query(
-                `select * from subjects
+                `select * from courses
                 limit ${num}
                 `
             )
         }else {return await promisePool.query(
-            `select * from subjects
+            `select * from courses
             `
         )
         }
@@ -17,4 +17,4 @@ const SubjectModel = {
     
 }
 
-export default SubjectModel;
+export default CourseModel;
