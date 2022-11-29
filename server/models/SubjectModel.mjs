@@ -5,15 +5,19 @@ const SubjectModel = {
         if(num){
             return await promisePool.query(
                 `select * from subjects
-                limit ${num}
-                `
+                limit ${num}`
             )
         }else {return await promisePool.query(
-            `select * from subjects
-            `
+            `select * from subjects`
         )
         }
     },
+    getSubjectWithID: async(id)=>{
+        return await promisePool.query(
+            `select * from subjects
+                where subjects.id = ${id}`
+        )
+    }
     
 }
 
