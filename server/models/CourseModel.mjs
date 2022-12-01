@@ -18,6 +18,12 @@ const CourseModel = {
             select * from courses
             where courses.subject_num = ${subject_num}
         `)
+    },
+    getCoursesWithID: async(id)=>{
+        return await promisePool.query(`
+            select * from courses
+            where courses.id = ${id}
+        `)
     }
 
 }

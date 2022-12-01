@@ -9,6 +9,13 @@ const getYTBThumbnail = (id) => {
     })
 
 }
+
+const getCourseInfo = (id) => {
+    return axios({
+        method: 'GET',
+        url: `${YTBPlayListAPI(id, 50)}`,
+    })
+}
 const CourseController = {
     getCourses: async (req, res) => {
         const { num } = req.query;
@@ -57,9 +64,25 @@ const CourseController = {
                 res.send({ ok: 1, courses })
             }
         )
+    },
+    getCoursesWithID: async (req, res) => {
+        const { id } = req.query;
+        const course = (await CourseModel.getCoursesWithID(id))[0][0];
+        const tbnArrResolution = ['maxres', 'standard', 'high', 'medium', 'default'];
+        if (course) {
+            course.info = (await getCourseInfo(course.youtube_url)).data;
+            for (let i = 0; i < tbnArrResolution.length; i++) {
+                if(course.info.items[0].snippet.thumbnails[tbnArrResolution[i]]){
+                    course.img_url = course.info.items[0].snippet.thumbnails[tbnArrResolution[i]].url;
+                    break;
+                }
+            }
+            res.send({ ok: 1, course});
+
+        }
+        else res.send({ ok: 0, message: 'No Course Exist' });
     }
 }
-
 
 export default CourseController;
 
