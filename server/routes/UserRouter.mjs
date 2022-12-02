@@ -26,6 +26,7 @@ router.get('/logout',logout);
 router.get('/checkLoginState',checkLoginState);
 router.get('/profile', UserController.getUserInfo);
 router.get('/get_suggestion', UserController.getSuggest);
+router.get('/get_user_info_with_id',UserController.getUserInfoWithID);
 
 
 export default router;

@@ -52,16 +52,28 @@ const UserController = {
         if (req.session.user) {
             const { id } = req.session.user;
             const response = (await UserModel.getUserInfo(id))[0][0];
-            res.send({ok:1,userObj : response});
+            res.send({ ok: 1, userObj: response });
         }
         else {
-            res.send({ok:0, message:"Not logged in", userObj:{}})
+            res.send({ ok: 0, message: "Not logged in" })
+        }
+
+    },
+
+    getUserInfoWithID: async (req, res) => {
+        if (req.session.user) {
+            const { id } = req.query;
+            const response = (await UserModel.getUserInfo(id))[0][0];
+            res.send({ ok: 1, userObj: response });
+        }
+        else {
+            res.send({ ok: 0, message: "No Such User" })
         }
 
     },
 
     updateUserInfo: async (req, res) => {
-        const { id, name, description, avatar,email } = req.body;
+        const { id, name, description, avatar, email } = req.body;
         const response = (await UserModel.getUserInfo(id))[0][0];
         const newInfo = {
             id,
@@ -76,13 +88,13 @@ const UserController = {
 
     addSuggest: async (req, res) => {
         const { user_id, type, content } = req.body;
-        await UserModel.addSuggest(user_id , type, content);
+        await UserModel.addSuggest(user_id, type, content);
         res.send({ ok: 1, message: "Sent" });
     },
 
-    getSuggest: async(req,res)=>{
+    getSuggest: async (req, res) => {
         const results = (await UserModel.getSuggest())[0];
-        res.send({ok:1, suggestions: results});
+        res.send({ ok: 1, suggestions: results });
     }
 }
 
