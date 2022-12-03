@@ -17,7 +17,7 @@ const sessionStore = new MySQLStore({}, promisePool);
 // Body-parser and serving files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dir, '../build')));
+app.use(express.static(path.join(__dir, '../build')));
 app.use(cors({
     origin: ['http://localhost:3000'],
     methods: ["GET", "POST"],
@@ -62,7 +62,7 @@ app.use('/api', MainRouter);
 
 // Serve React files
 // app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dir, './build', 'index.html'));
+//     res.sendFile(path.resolve(__dir, '../build', 'index.html'));
 // });
 
 export default app;
